@@ -1,6 +1,8 @@
 name: tiles_markdown_wysiwyg
-version: 0.0.1
-description: A starting point for Dart libraries or applications.
+version: 0.1.0
+author: Jakuub Uhrik <jakuub@mail.com>
+description: Small library with implementation of TinyMCE as a component for tiles with minimal implementation.
+homepage: https://github.com/jakuub/tiles_markdown_wysiwyg_component
 environment:
   sdk: '>=1.0.0 <2.0.0'
 dependencies:
