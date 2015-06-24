@@ -26,6 +26,11 @@ A simple usage example:
         result.value = textarea.value;
       }
     }), mountRoot);
+    
+## Look and feal
+
+The following screenshot shows all used functionality and typografy used:
+![The look and feel of the WYSIWYG](/../screenshots/screenshots/wysiwyg.png?raw=true "WYSIWYG screenshot")
 
 ## Features and bugs
 
