@@ -29,7 +29,7 @@ A simple usage example:
     
 ## Look and feal
 
-The following screenshot shows all used functionality and typografy used:
+The following screenshot shows all used functionality and typografy used. If there is enough space on page above the edited element, the toolbar is showed above the edited text, otherwise it is showned below. This is the below case to show full options of text formats without disturbing content.
 ![The look and feel of the WYSIWYG](/../screenshots/screenshots/wysiwyg.png?raw=true "WYSIWYG screenshot")
 
 ## Features and bugs
