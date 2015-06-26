@@ -16,12 +16,12 @@ initWysiwigInit() {
   convertHtmlToMarkdown = _convertHtmlToMarkdown;
 }
 
-_initWYSIWIG(String id) {
+_initWYSIWIG(String id, [bool inline = false]) {
   JsObject tinymce = context["tinymce"];
   tinymce.callMethod("init", [
     new JsObject.jsify({
       "selector": "div.wysiwyg#$id",
-      "inline": "true:",
+      "inline": inline,
       "toolbar": "undo redo | formatselect | bold italic | link image | bullist numlist",
       "menubar": false,
       "plugins": [],

@@ -42,7 +42,7 @@ void main() {
       new Future.delayed(new Duration(seconds: 1), () => null).then(
           expectAsync((_) {
         expect(mountRoot.children.last.children.first.classes
-            .contains("mce-content-body"), isTrue);
+            .contains("mce-container"), isTrue);
       }));
     });
 
@@ -88,5 +88,18 @@ void main() {
       expect(mountRoot.query("div.wysiwyg").innerHtml, contains("<h1>"));
     });
 
+    test("should have possibility to change inline in props", () {
+      unmountComponent(mountRoot);
+      mountComponent(markdownEditor(
+          children: "# test\ntestik",
+          listeners: {"onChange": catchEvent},
+          props: {INLINE: true}), mountRoot);
+
+      new Future.delayed(new Duration(seconds: 1), () => null).then(
+          expectAsync((_) {
+        expect(mountRoot.children.last.children.first.classes
+            .contains("mce-content-body"), isTrue);
+      }));
+    });
   });
 }

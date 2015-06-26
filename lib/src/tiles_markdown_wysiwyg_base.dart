@@ -41,7 +41,7 @@ class MarkdownEditor extends Component {
       "packages/tiles_markdown_wysiwyg/js/tinymce/js/tinymce/tinymce.min.js",
       "packages/tiles_markdown_wysiwyg/js/md.min.js"
     ]).then((_) {
-      initWYSIWIG(id);
+      initWYSIWIG(id, _getInline());
     });
   }
   
@@ -50,6 +50,13 @@ class MarkdownEditor extends Component {
       return markdownToHtml(children.first.props);
     }
     return null;
+  }
+  
+  _getInline() {
+    if(props is Map && props[INLINE] == true) {
+      return true;
+    }
+    return false;
   }
 }
 
@@ -60,3 +67,5 @@ _randomId() => "MarkdownEditor_${_random.nextInt(_randomRoof)}";
 
 Random _random = new Random();
 const num _randomRoof = 10000;
+
+const String INLINE = "inline";
