@@ -1,5 +1,5 @@
 name: tiles_markdown_wysiwyg
-version: 0.1.1
+version: 0.1.2
 author: Jakuub Uhrik <jakuub@mail.com>
 description: Small library with implementation of TinyMCE as a component for tiles with minimal implementation.
 homepage: https://github.com/jakuub/tiles_markdown_wysiwyg_component
@@ -9,4 +9,5 @@ dependencies:
   markdown: any
   tiles: '>=0.1.3+4'
 dev_dependencies:
+  browser: any
   test: '>=0.12.0 <0.13.0'

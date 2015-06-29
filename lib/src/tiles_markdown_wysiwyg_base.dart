@@ -11,24 +11,35 @@ import 'dart:math';
 import 'package:markdown/markdown.dart';
 
 class MarkdownEditor extends Component {
-  Map get props => super.props; 
+  Map get props => super.props;
   final String id;
   Component textareaComponent;
   MarkdownEditor(Map props, children)
       : id = _randomId(),
         super(props, children);
 
-  render() => div(
-      children: [
-    div(
-        props: {"dangerouslySetInnerHTML": _markdown(),"class": "wysiwyg", "id": id},
-        listeners: {"onChange": _wysiwygChange}),
-    textarea(
-        props: {
-      "style": "display: none",
-      "ref": (Component comp) => textareaComponent = comp
-    })
-  ]);
+  render() => div(children: _children);
+
+  List<ComponentDescription> get _children {
+    var generator = div;
+    if (!_inline) {
+      generator = textarea;
+    }
+    return [
+      generator(
+          props: {
+        "dangerouslySetInnerHTML": _markdown(),
+        "class": "wysiwyg",
+        "id": id
+      },
+          listeners: {"onChange": _wysiwygChange}),
+      textarea(
+          props: {
+        "style": "display: none",
+        "ref": (Component comp) => textareaComponent = comp
+      })
+    ];
+  }
 
   _wysiwygChange(_, event) {
     convertHtmlToMarkdown(event, textareaComponent);
@@ -41,27 +52,27 @@ class MarkdownEditor extends Component {
       "packages/tiles_markdown_wysiwyg/js/tinymce/js/tinymce/tinymce.min.js",
       "packages/tiles_markdown_wysiwyg/js/md.min.js"
     ]).then((_) {
-      initWYSIWIG(id, _getInline());
+      initWYSIWIG(id, _inline);
     });
   }
-  
+
   _markdown() {
-    if(children != null) {
+    if (children != null) {
       return markdownToHtml(children.first.props);
     }
     return null;
   }
-  
-  _getInline() {
-    if(props is Map && props[INLINE] == true) {
+
+  bool get _inline {
+    if (props is Map && props[INLINE] == true) {
       return true;
     }
     return false;
   }
 }
 
-ComponentDescriptionFactory markdownEditor =
-    registerComponent(({props, children}) => new MarkdownEditor(props, children));
+ComponentDescriptionFactory markdownEditor = registerComponent(
+    ({props, children}) => new MarkdownEditor(props, children));
 
 _randomId() => "MarkdownEditor_${_random.nextInt(_randomRoof)}";
 

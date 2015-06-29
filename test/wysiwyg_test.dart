@@ -101,5 +101,7 @@ void main() {
             .contains("mce-content-body"), isTrue);
       }));
     });
+    
+    // TODO tests for contents in inline and not inline mode
   });
 }

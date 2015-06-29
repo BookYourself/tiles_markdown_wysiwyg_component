@@ -17,30 +17,49 @@ initWysiwigInit() {
 }
 
 _initWYSIWIG(String id, [bool inline = false]) {
+  Element element = querySelector(".wysiwyg#$id");
   JsObject tinymce = context["tinymce"];
-  tinymce.callMethod("init", [
-    new JsObject.jsify({
-      "selector": "div.wysiwyg#$id",
-      "inline": inline,
-      "toolbar": "undo redo | formatselect | bold italic | link image | bullist numlist",
-      "menubar": false,
-      "plugins": [],
-      "setup": new JsFunction.withThis((_, JsObject editor) {
-        editor.callMethod("on", ["change", (JsObject e){
-          Element element = editor.callMethod("getElement");
-          element.dispatchEvent(new Event("change"));
-        }]);
-      }),
-    })
-  ]);
+  tinymce.callMethod("init", [_options(id, inline, element)]);
 }
 
+JsObject _options(String id, bool inline, Element element) =>
+    new JsObject.jsify({
+  "selector": ".wysiwyg#$id",
+  "inline": inline,
+  "toolbar":
+      "undo redo | formatselect | bold italic | link image | bullist numlist",
+  "menubar": false,
+  "setup": _initChangeListener(element),
+});
+
+JsFunction _initChangeListener(Element element) => new JsFunction.withThis((_, JsObject editor) {
+    editor.callMethod("on", [
+      "change",
+      (JsObject e) {
+        if (element is TextAreaElement) {
+          element.value = editor.callMethod("getContent");
+        }
+        element.dispatchEvent(new Event("change"));
+      }
+    ]);
+  });
+
 _convertHtmlToMarkdown(Event event, Component textareaComponent) {
-  Element wrapper = event.target; 
-  String html = wrapper.innerHtml;
+  Element wrapper = event.target;
+  String html = _getContent(wrapper);
   String markdown = context.callMethod("md", [html]);
-  
+
   Element textarea = getElementForComponent(textareaComponent);
   textarea.text = markdown;
   textarea.dispatchEvent(new Event("change"));
+}
+
+String _getContent(Element wrapper) {
+  String html;
+  if (wrapper is DivElement) {
+    html = wrapper.innerHtml;
+  } else if (wrapper is TextAreaElement) {
+    html = wrapper.value;
+  }
+  return html;
 }

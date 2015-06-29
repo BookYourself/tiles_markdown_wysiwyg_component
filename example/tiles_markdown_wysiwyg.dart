@@ -22,4 +22,15 @@ main() {
       result.value = textarea.value;
     }
   }), mountRoot);
+
+
+  Element mountRootInline = querySelector("#container-inline");
+  TextAreaElement resultInline = querySelector("#result-inline");
+  
+  mountComponent(markdownEditor(children: "# title", listeners: {
+    "onChange": (MarkdownEditor component, Event event) {
+      TextAreaElement textarea = getElementForComponent(component.textareaComponent);
+      resultInline.value = textarea.value;
+    }
+  }, props: {INLINE: true}), mountRootInline);
 }

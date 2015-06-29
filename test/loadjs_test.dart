@@ -29,5 +29,6 @@ void main() {
       expect(querySelectorAll('script[src*="tinymce.min"]').length, equals(1));
     });
 
+    // TODO multiple load test
   });
 }
