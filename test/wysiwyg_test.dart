@@ -37,6 +37,16 @@ void main() {
     test("should load js", () {
       expect(querySelectorAll("script").length, greaterThan(countOfScripts));
     });
+    
+    test("should load based on packages url in props", () {
+      unmountComponent(mountRoot);
+      mountComponent(
+          markdownEditor(children: "", props: {
+            PACKAGES_URL: "somepackagesurl124"
+          }),
+          mountRoot);
+      expect(querySelectorAll("script[src*='somepackagesurl124']").length, greaterThan(0));
+    });
 
     test("should init tinymce", () {
       new Future.delayed(new Duration(seconds: 1), () => null).then(
@@ -47,25 +57,25 @@ void main() {
     });
 
     test("should not bubble change event from div", () {
-      DivElement div = mountRoot.children.first.children.first;
-      div.click();
-      div.innerHtml = "edited";
+      Element element = mountRoot.children.first.children.first;
+      element.click();
+      element.innerHtml = "edited";
       Event customEvent = new Event("change");
 
       window.animationFrame.then(expectAsync((_) {
         expect(events, isNot(isEmpty));
         Event event = events.first;
-        expect(event.target, isNot(equals(div)));
+        expect(event.target, isNot(equals(element)));
         expect(event.target is TextAreaElement, isTrue);
       }));
 
-      div.dispatchEvent(customEvent);
+      element.dispatchEvent(customEvent);
     });
 
     test("should convert html to markdown", () {
-      DivElement div = mountRoot.children.first.children.first;
-      div.click();
-      div.innerHtml = "<h1>edited</h1>";
+      Element element = mountRoot.children.first.children.first;
+      element.click();
+      element.innerHtml = "<h1>edited</h1>";
       Event customEvent = new Event("change");
 
       window.animationFrame.then(expectAsync((_) {
@@ -75,13 +85,13 @@ void main() {
         expect(textarea.value, contains("# "));
       }));
 
-      div.dispatchEvent(customEvent);
+      element.dispatchEvent(customEvent);
     });
 
     test("should accept content in markdown in children", () {
       unmountComponent(mountRoot);
       mountComponent(markdownEditor(
-              children: "# test\ntestik", listeners: {"onChange": catchEvent}),
+              children: "# test\ntestik", listeners: {"onChange": catchEvent}, props: {INLINE: true}),
           mountRoot);
 
       expect(mountRoot.query("div.wysiwyg").text, contains("test"));
@@ -101,6 +111,7 @@ void main() {
             .contains("mce-content-body"), isTrue);
       }));
     });
+    
     
     // TODO tests for contents in inline and not inline mode
   });

@@ -49,8 +49,8 @@ class MarkdownEditor extends Component {
   @override
   didMount() {
     load([
-      "packages/tiles_markdown_wysiwyg/js/tinymce/js/tinymce/tinymce.min.js",
-      "packages/tiles_markdown_wysiwyg/js/md.min.js"
+      "${_packagesUrl}packages/tiles_markdown_wysiwyg/js/tinymce/js/tinymce/tinymce.min.js",
+      "${_packagesUrl}packages/tiles_markdown_wysiwyg/js/md.min.js"
     ]).then((_) {
       initWYSIWIG(id, _inline);
     });
@@ -69,6 +69,14 @@ class MarkdownEditor extends Component {
     }
     return false;
   }
+  
+  String get _packagesUrl {
+    if (props is Map && props.containsKey(PACKAGES_URL)) {
+      return props[PACKAGES_URL];
+    }
+    return "";
+  }
+  
 }
 
 ComponentDescriptionFactory markdownEditor = registerComponent(
@@ -80,3 +88,4 @@ Random _random = new Random();
 const num _randomRoof = 10000;
 
 const String INLINE = "inline";
+const String PACKAGES_URL = "packages_url";
