@@ -9,6 +9,7 @@ import 'package:tiles/tiles.dart';
 import '../tiles_markdown_wysiwyg.dart';
 import 'dart:math';
 import 'package:markdown/markdown.dart';
+import 'package:tiles_markdown_wysiwyg/custom_markdown.dart';
 
 class MarkdownEditor extends Component {
   Map get props => super.props;
@@ -58,7 +59,7 @@ class MarkdownEditor extends Component {
 
   _markdown() {
     if (children != null) {
-      return markdownToHtml(children.first.props);
+      return md(children.first.props);
     }
     return null;
   }
