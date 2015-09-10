@@ -7,10 +7,18 @@ import 'package:test/test.dart';
 main() {
   String text = "ahoj 1\\. ";
 
-  print(md(text));
   group("(Custom markdown)", () {
     test("should fix number-backslash-dot", () {
       expect(md(text), isNot(contains("\\")));
+    });
+    
+    test("should work with external links", () {
+      text = '''# title
+
+[www.google.com][0]
+
+[0]: http://www.google.com''';
+      expect(md(text), contains("a href"));
     });
   });
 }

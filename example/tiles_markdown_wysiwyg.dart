@@ -7,6 +7,7 @@ import 'package:tiles_markdown_wysiwyg/tiles_markdown_wysiwyg.dart';
 import 'package:tiles/tiles_browser.dart';
 import 'dart:html';
 import 'package:tiles_markdown_wysiwyg/tiles_markdown_wysiwyg_browser.dart';
+import 'package:tiles_markdown_wysiwyg/custom_markdown.dart';
 import 'package:tiles/tiles.dart';
 
 main() {
@@ -15,11 +16,20 @@ main() {
 
   Element mountRoot = querySelector("#container");
   TextAreaElement result = querySelector("#result");
+  DivElement resultCompiled = querySelector("#result-compiled");
   
   mountComponent(markdownEditor(children: "# title", listeners: {
     "onChange": (MarkdownEditor component, Event event) {
       TextAreaElement textarea = getElementForComponent(component.textareaComponent);
       result.value = textarea.value;
+      print(md(result.value));
+      
+      final NodeValidatorBuilder _htmlValidator=new NodeValidatorBuilder.common()
+          ..allowElement('a', attributes: ['data-target', 'data-toggle', 'href'])
+          ..allowElement('img', attributes: ['src'])
+        ..allowElement('button', attributes: ['data-target', 'data-toggle']);
+
+      resultCompiled.setInnerHtml(md(result.value), validator: _htmlValidator);
     }
   }), mountRoot);
 

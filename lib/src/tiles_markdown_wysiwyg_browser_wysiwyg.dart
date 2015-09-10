@@ -27,9 +27,11 @@ JsObject _options(String id, bool inline, Element element) =>
   "selector": ".wysiwyg#$id",
   "inline": inline,
   "toolbar":
-      "undo redo | formatselect | bold italic | link image | bullist numlist",
+      "undo redo | formatselect | bold italic | link | bullist numlist",
   "menubar": false,
   "setup": _initChangeListener(element),
+  "plugins": ["link", "autolink"],
+  "target_list": false,
 });
 
 JsFunction _initChangeListener(Element element) => new JsFunction.withThis((_, JsObject editor) {
