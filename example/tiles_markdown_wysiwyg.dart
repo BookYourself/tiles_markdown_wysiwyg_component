@@ -17,22 +17,27 @@ main() {
   Element mountRoot = querySelector("#container");
   TextAreaElement result = querySelector("#result");
   DivElement resultCompiled = querySelector("#result-compiled");
-  
+
+  var updateTextarea = (MarkdownEditor component, Event event) {
+    TextAreaElement textarea = getElementForComponent(component.textareaComponent);
+    result.value = textarea.value;
+    print(md(result.value));
+
+    final NodeValidatorBuilder _htmlValidator=new NodeValidatorBuilder.common()
+      ..allowElement('a', attributes: ['data-target', 'data-toggle', 'href'])
+      ..allowElement('img', attributes: ['src'])
+      ..allowElement('button', attributes: ['data-target', 'data-toggle']);
+
+    resultCompiled.setInnerHtml(md(result.value), validator: _htmlValidator);
+    print("test");
+  };
+
   mountComponent(markdownEditor(children: "# title", listeners: {
-    "onChange": (MarkdownEditor component, Event event) {
-      TextAreaElement textarea = getElementForComponent(component.textareaComponent);
-      result.value = textarea.value;
-      print(md(result.value));
-      
-      final NodeValidatorBuilder _htmlValidator=new NodeValidatorBuilder.common()
-          ..allowElement('a', attributes: ['data-target', 'data-toggle', 'href'])
-          ..allowElement('img', attributes: ['src'])
-        ..allowElement('button', attributes: ['data-target', 'data-toggle']);
-
-      resultCompiled.setInnerHtml(md(result.value), validator: _htmlValidator);
-    }
+    "onChange": updateTextarea,
+    "onKeyup": updateTextarea
+  }, props: {
+    EVENTS: ["keyup", "change"]
   }), mountRoot);
-
 
   Element mountRootInline = querySelector("#container-inline");
   TextAreaElement resultInline = querySelector("#result-inline");
@@ -44,3 +49,4 @@ main() {
     }
   }, props: {INLINE: true}), mountRootInline);
 }
+
