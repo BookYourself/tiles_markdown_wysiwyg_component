@@ -16,34 +16,37 @@ initWysiwigInit() {
   convertHtmlToMarkdown = _convertHtmlToMarkdown;
 }
 
-_initWYSIWIG(String id, [bool inline = false]) {
+_initWYSIWIG(String id, List events, [bool inline = false]) {
   Element element = querySelector(".wysiwyg#$id");
   JsObject tinymce = context["tinymce"];
-  tinymce.callMethod("init", [_options(id, inline, element)]);
+  tinymce.callMethod("init", [_options(id, inline, element, events)]);
 }
 
-JsObject _options(String id, bool inline, Element element) =>
-    new JsObject.jsify({
-  "selector": ".wysiwyg#$id",
-  "inline": inline,
-  "toolbar":
-      "undo redo | formatselect | bold italic | link | bullist numlist",
-  "menubar": false,
-  "setup": _initChangeListener(element),
-  "plugins": ["link", "autolink"],
-  "target_list": false,
-});
+JsObject _options(String id, bool inline, Element element, List events) =>
+  new JsObject.jsify({
+    "selector": ".wysiwyg#$id",
+    "inline": inline,
+    "toolbar":
+        "undo redo | formatselect | bold italic | link | bullist numlist",
+    "menubar": false,
+    "setup": _initChangeListener(element, events),
+    "plugins": ["link", "autolink"],
+    "target_list": false,
+  });
 
-JsFunction _initChangeListener(Element element) => new JsFunction.withThis((_, JsObject editor) {
-    editor.callMethod("on", [
-      "change",
-      (JsObject e) {
-        if (element is TextAreaElement) {
-          element.value = editor.callMethod("getContent");
+JsFunction _initChangeListener(Element element, List events) =>
+  new JsFunction.withThis((_, JsObject editor) {
+    events.forEach((event) {
+      editor.callMethod("on", [
+        event,
+        (JsObject e) {
+          if (element is TextAreaElement) {
+            element.value = editor.callMethod("getContent");
+          }
+          element.dispatchEvent(new Event(event));
         }
-        element.dispatchEvent(new Event("change"));
-      }
-    ]);
+      ]);
+    });
   });
 
 _convertHtmlToMarkdown(Event event, Component textareaComponent) {
