@@ -53,7 +53,7 @@ class MarkdownEditor extends Component {
       "${_packagesUrl}packages/tiles_markdown_wysiwyg/js/tinymce/js/tinymce/tinymce.min.js",
       "${_packagesUrl}packages/tiles_markdown_wysiwyg/js/md.min.js"
     ]).then((_) {
-      initWYSIWIG(id, _inline);
+      initWYSIWIG(id, events, _inline);
     });
   }
 
@@ -70,14 +70,21 @@ class MarkdownEditor extends Component {
     }
     return false;
   }
-  
+
+  List get events {
+    if (props is Map && props.containsKey(EVENTS)) {
+      return props[EVENTS];
+    }
+    return ["change"];
+  }
+
   String get _packagesUrl {
     if (props is Map && props.containsKey(PACKAGES_URL)) {
       return props[PACKAGES_URL];
     }
     return "";
   }
-  
+
 }
 
 ComponentDescriptionFactory markdownEditor = registerComponent(
@@ -90,3 +97,4 @@ const num _randomRoof = 10000;
 
 const String INLINE = "inline";
 const String PACKAGES_URL = "packages_url";
+const String EVENTS = "events";
