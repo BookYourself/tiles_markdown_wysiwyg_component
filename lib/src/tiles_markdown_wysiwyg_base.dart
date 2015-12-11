@@ -33,13 +33,23 @@ class MarkdownEditor extends Component {
         "class": "wysiwyg",
         "id": id
       },
-          listeners: {"onChange": _wysiwygChange}),
+          listeners: _listenersForEvents),
       textarea(
           props: {
         "style": "display: none",
         "ref": (Component comp) => textareaComponent = comp
       })
     ];
+  }
+
+  get _listenersForEvents {
+    var result = {};
+
+    events.forEach((event) {
+      result[event] = _wysiwygChange;
+    });
+
+    return result;
   }
 
   _wysiwygChange(_, event) {
