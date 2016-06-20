@@ -57,14 +57,23 @@ class MarkdownEditor extends Component {
     return false;
   }
 
+  bool isUnmounted = false;
+
   @override
   didMount() {
     load([
       "${_packagesUrl}packages/tiles_markdown_wysiwyg/js/tinymce/js/tinymce/tinymce.min.js",
       "${_packagesUrl}packages/tiles_markdown_wysiwyg/js/md.min.js"
     ]).then((_) {
-      initWYSIWIG(id, events, _inline);
+      if (!isUnmounted) {
+        initWYSIWIG(id, events, _inline);
+      }
     });
+  }
+
+  @override
+  willUnmount() {
+    isUnmounted = true;
   }
 
   _markdown() {
