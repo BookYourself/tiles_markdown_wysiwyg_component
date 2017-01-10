@@ -32,6 +32,7 @@ JsObject _options(String id, bool inline, Element element, List events) =>
     "setup": _initChangeListener(element, events),
     "plugins": ["link", "autolink"],
     "target_list": false,
+    "block_formats": "Heading 1=h1; Heading 2=h2;",
   });
 
 JsFunction _initChangeListener(Element element, List events) =>
